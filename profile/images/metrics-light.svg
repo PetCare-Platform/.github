@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 150" width="980" height="150" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+<rect x="0.0" y="5.0" width="230" height="140" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="115.0" y="63.0" text-anchor="middle" font-size="36" font-weight="800" fill="#1a7f37">0건</text>
+<text x="115.0" y="97.0" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">초과 발급 · 중복 발급</text>
+<text x="115.0" y="123.0" text-anchor="middle" font-size="15" fill="#59636e">동시 20,000명 × 5회차</text>
+<rect x="250.0" y="5.0" width="230" height="140" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="365.0" y="63.0" text-anchor="middle" font-size="36" font-weight="800" fill="#0969da">1,030 TPS</text>
+<text x="365.0" y="97.0" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">접수 처리량</text>
+<text x="365.0" y="123.0" text-anchor="middle" font-size="15" fill="#59636e">접수 성공률 100%</text>
+<rect x="500.0" y="5.0" width="230" height="140" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="615.0" y="63.0" text-anchor="middle" font-size="36" font-weight="800" fill="#8250df">4.8배</text>
+<text x="615.0" y="97.0" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">접수 응답 단축</text>
+<text x="615.0" y="123.0" text-anchor="middle" font-size="15" fill="#59636e">Redis 단독 대비 Kafka</text>
+<rect x="750.0" y="5.0" width="230" height="140" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<text x="865.0" y="63.0" text-anchor="middle" font-size="36" font-weight="800" fill="#9a6700">80 / 80</text>
+<text x="865.0" y="97.0" text-anchor="middle" font-size="18" font-weight="700" fill="#1f2328">통합 테스트 통과</text>
+<text x="865.0" y="123.0" text-anchor="middle" font-size="15" fill="#59636e">정상 · 예외 · 동시성 등 7개 구간</text>
+</svg>

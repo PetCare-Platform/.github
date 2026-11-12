@@ -18,9 +18,7 @@
 
 ## 📌 프로젝트 소개
 
-선착순 쿠폰 발급은 짧은 시간에 같은 재고로 요청이 몰립니다. 동시성 제어가 없으면 **초과 발급과 갱신 유실**이 생기고, 잠금으로 정합성을 지키더라도 높은 경합에서 **처리량과 응답 속도**가 충분한지는 따로 확인해야 합니다.
-
-우리 팀은 이 문제를 감으로 결정하지 않고, **실험으로 전략을 고른 뒤 그 전략으로 실제 서비스를 구현**했습니다.
+선착순 쿠폰은 짧은 시간에 같은 재고로 요청이 몰립니다. 우리 팀은 **6가지 동시성 전략을 실험으로 비교**하고, 고른 전략으로 실제 서비스를 구현했습니다.
 
 <p align="center">
   <picture>
@@ -30,42 +28,40 @@
   </picture>
 </p>
 
-### 핵심 요구사항
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./images/metrics-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="./images/metrics-light.svg" />
+    <img src="./images/metrics-light.svg" alt="초과·중복 발급 0건 · 접수 처리량 1,030 TPS · 접수 응답 4.8배 단축 · 통합 테스트 80/80 통과" width="100%" />
+  </picture>
+</p>
 
-| # | 요구사항 |
-| --- | --- |
-| 1 | 발급 수량이 쿠폰 전체 수량을 초과하지 않는다 |
-| 2 | 동일한 사용자는 하나의 쿠폰을 중복 발급받을 수 없다 |
-| 3 | 같은 요청이 재전송되더라도 한 번만 처리한다 |
-| 4 | Kafka 메시지가 중복 전달되더라도 DB에는 한 번만 반영한다 |
-| 5 | 일시적인 장애가 발생하더라도 발급 요청이 유실되지 않는다 |
-| 6 | 자동 복구가 불가능한 메시지는 수동 재처리할 수 있다 |
+<details>
+<summary><b>핵심 요구사항</b></summary>
+<br/>
 
-**정합성이 성능보다 우선입니다.** 초과 발급이 1건이라도 발생하면 성능 수치와 무관하게 실패로 판정합니다.
+- **초과 발급 방지** — 발급 수량이 쿠폰 전체 수량을 넘지 않는다
+- **1인 1매** — 같은 사용자는 하나의 쿠폰만 발급받는다
+- **중복 요청 방지** — 재전송이나 Kafka 중복 전달에도 한 번만 반영한다
+- **유실 방지와 복구** — 장애에도 요청이 유실되지 않고, 실패 메시지는 수동 재처리한다
+
+정합성이 성능보다 우선이며, 초과 발급이 1건이라도 생기면 실패로 판정합니다.
+
+</details>
 
 ---
 
 ## 📦 Repositories
 
-| Repository | 역할 |
-| --- | --- |
-| [**coupon-concurrency-experiment**](https://github.com/PetCare-Platform/coupon-concurrency-experiment) | 6가지 동시성 제어 전략을 동일 조건에서 비교한 실험 모듈 |
-| [**petcoupon-backend**](https://github.com/PetCare-Platform/petcoupon-backend) | 선정한 Redis + Kafka 구조로 구현한 쿠폰 발급 백엔드 |
-| [**petcoupon-frontend**](https://github.com/PetCare-Platform/petcoupon-frontend) | 사용자 발급 화면, 관리자 이벤트·쿠폰 관리, 운영 대시보드 |
+- 🔬 [**coupon-concurrency-experiment**](https://github.com/PetCare-Platform/coupon-concurrency-experiment) — 동시성 전략 비교 실험
+- ⚙️ [**petcoupon-backend**](https://github.com/PetCare-Platform/petcoupon-backend) — Redis + Kafka 기반 쿠폰 발급 백엔드
+- 🖥 [**petcoupon-frontend**](https://github.com/PetCare-Platform/petcoupon-frontend) — 사용자 · 관리자 · 운영 대시보드 화면
 
 ---
 
 ## 🔬 1단계 — 동시성 전략 실험
 
-같은 쿠폰 발급 기능을 6개 전략으로 구현하고, AWS의 독립된 서버에서 k6로 동시 요청을 보내 비교했습니다. 응답 성능뿐 아니라 **초과 발급 · 1인 1매 · 중복 요청 · 최종 재고 정합성**을 함께 검증했습니다.
-
-| 단계 | 비교 대상 | 재고 / 요청 |
-| --- | --- | ---: |
-| 실험 A | `DIRECT` `PESSIMISTIC` `OPTIMISTIC` `CONDITIONAL` `REDIS` | 10/20 → 1,000/2,000 |
-| 실험 B | `REDIS` vs `KAFKA` | 10/20 → 1,000/2,000 |
-| 최종 검증 | `KAFKA` | 10,000/20,000 |
-
-### 재고 차감 전략 비교 (재고 1,000 · 요청 2,000 · 3회 평균)
+같은 조건(재고 1,000 · 요청 2,000 · 3회 평균)에서 전략별 정합성과 성능을 비교했습니다.
 
 | 전략 | 정합성 | 처리량 | p95 응답 시간 |
 | --- | :---: | ---: | ---: |
@@ -75,22 +71,22 @@
 | `CONDITIONAL` | ○ | 235 req/s | 8,005ms |
 | `REDIS` (Lua Script) | ○ | **855 req/s** | **1,941ms** |
 
-DB 기반 전략은 재고 한 행에 대한 경합으로 약 220 req/s 부근에서 포화했습니다. Redis Lua Script는 DB 최선인 `CONDITIONAL`보다 처리량이 **3.6배** 높았습니다.
+> ✅ **Redis + Kafka 선정** — Redis Lua로 재고를 원자적으로 선점하고, DB 저장은 Kafka로 비동기화해 **접수 응답을 4.8배 단축**했습니다.
 
-### Redis 동기 저장 vs Kafka 비동기 저장
+<details>
+<summary><b>Redis 동기 저장 vs Kafka 비동기 저장 비교</b></summary>
+<br/>
 
-| 지표 | `REDIS` | `KAFKA` |
-| --- | ---: | ---: |
-| 평균 접수 응답 | 1,262.9ms | **262.8ms** (4.8배 ↓) |
-| p95 접수 응답 | 1,795.2ms | **492.6ms** |
-| DB 최종 반영 완료 | **2.28초** | 5.22초 |
-| 정합성 | ○ | ○ |
+- **평균 접수 응답**: 1,262.9ms → **262.8ms**
+- **p95 접수 응답**: 1,795.2ms → **492.6ms**
+- **DB 최종 반영 완료**: 2.28초 → 5.22초 (비동기라 최종 완료는 더 느림)
+- **정합성**: 두 전략 모두 접수 수와 최종 DB 반영 수 일치
 
-### ✅ 최종 선정: Redis + Kafka
+최종 저장 속도보다 **사용자가 체감하는 접수 속도**를 우선해 Kafka를 선택했습니다.
 
-선착순 쿠폰에서는 최종 저장 완료 속도보다 **사용자가 체감하는 신청 접수 속도**가 더 중요하다고 판단했습니다. Redis로 재고를 원자적으로 선점하고, Kafka로 DB 저장을 비동기화해 무거운 DB 쓰기를 응답 경로에서 분리했습니다.
+</details>
 
-👉 상세: [실험 설계](https://github.com/PetCare-Platform/coupon-concurrency-experiment/blob/dev/docs/concurrency-experiment.md) · [실험 결과](https://github.com/PetCare-Platform/coupon-concurrency-experiment/blob/dev/docs/experiment-results.md)
+👉 [실험 설계](https://github.com/PetCare-Platform/coupon-concurrency-experiment/blob/dev/docs/concurrency-experiment.md) · [실험 결과](https://github.com/PetCare-Platform/coupon-concurrency-experiment/blob/dev/docs/experiment-results.md)
 
 ---
 
