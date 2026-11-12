@@ -22,13 +22,13 @@
 
 우리 팀은 이 문제를 감으로 결정하지 않고, **실험으로 전략을 고른 뒤 그 전략으로 실제 서비스를 구현**했습니다.
 
-```mermaid
-flowchart LR
-    A["🔬 <b>1단계 · 실험</b><br/>6가지 동시성 전략 비교"]
-    B["✅ <b>2단계 · 선정</b><br/>Redis + Kafka<br/>접수 응답 4.8배 단축"]
-    C["🚀 <b>3단계 · 구현</b><br/>Backend · Frontend<br/>동시 20,000명 · 초과 발급 0건"]
-    A --> B --> C
-```
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="./images/flow-dark.svg" />
+    <source media="(prefers-color-scheme: light)" srcset="./images/flow-light.svg" />
+    <img src="./images/flow-light.svg" alt="1단계 실험(6가지 동시성 전략 비교) → 2단계 선정(Redis + Kafka) → 3단계 구현(동시 20,000명 · 초과 발급 0건)" width="100%" />
+  </picture>
+</p>
 
 ### 핵심 요구사항
 

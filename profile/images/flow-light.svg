@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 170" width="980" height="170" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI','Apple SD Gothic Neo','Noto Sans KR','Malgun Gothic',sans-serif">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8c959f"/></marker></defs>
+<rect x="0.0" y="10.0" width="300" height="150" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="0.0" y="10.0" width="300" height="5" rx="2.5" fill="#0969da"/>
+<text x="150.0" y="50.0" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="1" fill="#0969da">STEP 1 · 실험</text>
+<text x="150.0" y="92.0" text-anchor="middle" font-size="25" font-weight="700" fill="#1f2328">6가지 동시성 전략 비교</text>
+<text x="150.0" y="127.0" text-anchor="middle" font-size="16.5" fill="#59636e">DB 락 · 조건부 UPDATE · Redis · Kafka</text>
+<line x1="307.0" y1="85.0" x2="331.0" y2="85.0" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
+<rect x="340.0" y="10.0" width="300" height="150" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="340.0" y="10.0" width="300" height="5" rx="2.5" fill="#1a7f37"/>
+<text x="490.0" y="50.0" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="1" fill="#1a7f37">STEP 2 · 선정</text>
+<text x="490.0" y="92.0" text-anchor="middle" font-size="25" font-weight="700" fill="#1f2328">Redis + Kafka</text>
+<text x="490.0" y="127.0" text-anchor="middle" font-size="16.5" fill="#59636e">접수 응답 4.8배 단축</text>
+<line x1="647.0" y1="85.0" x2="671.0" y2="85.0" stroke="#8c959f" stroke-width="2" marker-end="url(#a)"/>
+<rect x="680.0" y="10.0" width="300" height="150" rx="12" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1.5"/>
+<rect x="680.0" y="10.0" width="300" height="5" rx="2.5" fill="#8250df"/>
+<text x="830.0" y="50.0" text-anchor="middle" font-size="16" font-weight="700" letter-spacing="1" fill="#8250df">STEP 3 · 구현</text>
+<text x="830.0" y="92.0" text-anchor="middle" font-size="25" font-weight="700" fill="#1f2328">Backend · Frontend 구현</text>
+<text x="830.0" y="127.0" text-anchor="middle" font-size="16.5" fill="#59636e">동시 20,000명 · 초과 발급 0건</text>
+</svg>
